@@ -3,6 +3,8 @@ import user from '../idSchema.js';
 
 const router = express.Router();
 
+
+// get all the data
 router.get('/bgmiid',async (req, res) => {
     try {
         const users=await user.find({});
@@ -12,6 +14,21 @@ router.get('/bgmiid',async (req, res) => {
         res.status(404).json({message:error.message});
     }
 });
+
+// get single user
+router.get('/bgmiid/:id',async (req, res) => {
+    const {id}=req.params;
+    try {
+        const users=await user.findById(id);
+        res.status(200).json(users);
+
+    } catch (error) {
+        res.status(404).json({message:error.message});
+    }
+});
+
+
+// add user
 
 router.post('/bgmiid',async (req,res)=>{
     const {bgmi_id,name,login,id,password}=req.body;
@@ -25,6 +42,8 @@ router.post('/bgmiid',async (req,res)=>{
     }
 });
 
+// delete user
+
 router.delete('/bgmiid/:bgmi_id',async (req,res)=>{
     const {bgmi_id}=req.params;
     try{
@@ -37,19 +56,18 @@ router.delete('/bgmiid/:bgmi_id',async (req,res)=>{
 });
 
 // update route
-// router.put('/bgmiid/:bgmi_id',async (req,res)=>{
-//     const {bgmi_id}=req.params;
-//     const {name,login,id,password}=req.body;
-//     try{
-//         await user.findOneAndUpdate({bgmi_id},{name,login,id,password});
-//         res.status(201).json({message:"ID updated successfully"});
-//     }
-//     catch(error){
-//         res.status(409).json({message:error.message});
-//     }
-// });
-    
-
+router.put('/bgmiid/:_id',async (req,res)=>{
+    const {_id}=req.params;
+    // console.log(req.params);
+    const {name,login,id,password,bgmi_id}=req.body;
+    try{
+        await user.findOneAndUpdate({_id},{name,login,id,password,bgmi_id});
+        res.status(201).json({message:"ID updated successfully"});
+    }
+    catch(error){
+        res.status(409).json({message:error.message});
+    }
+});
 
 
 
